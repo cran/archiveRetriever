@@ -1,0 +1,17 @@
+27654f0c2eadeaa0020b33aee695b2df *DESCRIPTION
+c6c2319f582d1fd2ead6b15e3ea9043f *NAMESPACE
+15813d4024c63d24399e795a9fe12d98 *NEWS.md
+944cbd0cc7bf9199bee4e02b16b05e1f *R/archive_overview.R
+a7a39a846570f6e624d6afa11113c294 *R/retrieve_links.R
+8a8ff12be2b1427f2d3cb2b588b255d9 *R/retrieve_urls.R
+03fd8f80ec3616f9d9748e9f1e83a7c9 *R/scrape_urls.R
+8e2a8525f6b8b4d864511f96b9c3926a *README.md
+8b199114b6f0c2e320ee6cd8bc4d9fc1 *man/archive_overview.Rd
+77b8b812b3b698693660f565c622518b *man/retrieve_links.Rd
+09d0cc209a2012545ac7b7bad85c65b4 *man/retrieve_urls.Rd
+c1133a53c2496e3f5c4dcf2c316d4619 *man/scrape_urls.Rd
+98fe0cc3ceaf85b665ec89ed3f438656 *tests/testthat.R
+334c537eda9b0688905ef1a5b7542811 *tests/testthat/test_archive_overview.R
+7c502b8052e55362770cd4e366f46a9d *tests/testthat/test_retrieve_links.R
+95fc05c60d61dbb2ddbd1dedf9fc4e5c *tests/testthat/test_retrieve_urls.R
+a6095e0a72eccade5e8461e10ff90901 *tests/testthat/test_scrape_urls.R

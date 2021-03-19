@@ -1,12 +1,12 @@
 context("check-overview-output")
 library(testthat)
+library(webmockr)
 library(archiveRetriever)
-
 
 #Check for the sensitivity of the date format
 test_that("archive_overview() returns a plot with the correct time frame", {
   output_overview <-
-    archive_overview(homepage = "nytimes.com",
+    archive_overview(homepage = "https://www.nytimes.com/",
                      startDate = "2018-06-01",
                      endDate = "Dec/01/2018")
   expect_equal(output_overview$data$date[1], as.Date("2018-06-01"))
@@ -16,18 +16,10 @@ test_that("archive_overview() returns a plot with the correct time frame", {
 #Check for correct output when covering more than one year
 test_that("archive_overview() returns a plot in gtable class", {
   output_overview <-
-    archive_overview(homepage = "nytimes.com",
+    archive_overview(homepage = "https://www.nytimes.com/",
                      startDate = "2018-06-01",
                      endDate = "Dec/01/2019")
   expect_is(output_overview, "gtable")
-})
-
-#Check for correct URLs only
-test_that("archive_overview() only creates plot for existing URLs", {
-  expect_error(
-    archive_overview("www.independent..co.uk", "20Sep2014", "20Sep2015"),
-    "Could not resolve host"
-  )
 })
 
 #Check if start date is character
@@ -74,7 +66,6 @@ test_that("archive_overview() needs endDate to be not in the future", {
   )
 })
 
-
 #Check whether Homepage has ever been saved in the Internet Archive
 test_that("archive_overview() needs homepage to be saved in the Internet Archive",
           {
@@ -87,16 +78,3 @@ test_that("archive_overview() needs homepage to be saved in the Internet Archive
               "Homepage has never been saved in the Internet Archive"
             )
           })
-
-
-#Check whether URL exists with 200 status
-test_that("archive_overview() needs homepage with status 200", {
-  expect_error(
-    archive_overview(
-      "https://www.sowi.uni-mannheim.de/schoen/team/akademische-mitarbeiterinnen-und-mitarbeiter/gavras-konstantin/",
-      "2016-01-01",
-      "2016-05-31"
-    ),
-    "Please add an existing URL"
-  )
-})

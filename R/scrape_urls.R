@@ -14,7 +14,7 @@
 #' @param encoding  	Specify a default encoding for the homepage. Default is 'UTF-8'
 #' @param lengthwarning Warning function for large number of URLs appears. Set FALSE to disable default warning.
 #'
-#' @return This function scrapes the content of mementos or lower-level web pages from the Internet Archive. It returns a tibble including Urls and the scraped content. However, a memento being stored in the Internet Archive does not guarantee that the information from the homepage can be actually scraped.
+#' @return This function scrapes the content of mementos or lower-level web pages from the Internet Archive. It returns a tibble including Urls and the scraped content. However, a memento being stored in the Internet Archive does not guarantee that the information from the homepage can be actually scraped. As the Internet Archive is an internet resource, it is always possible that a request fails due to connectivity problems. One easy and obvious solution is to re-try the function.
 
 # Importing dependencies with roxygen2
 #' @importFrom xml2 read_html
@@ -46,6 +46,8 @@ scrape_urls <-
            encoding = "UTF-8",
            lengthwarning = TRUE) {
     #### A priori consistency checks
+    # Globally bind variables
+    counter <- NULL
 
     # Urls must start with http
     if (!any(stringr::str_detect(Urls, "web\\.archive\\.org")))
@@ -205,10 +207,11 @@ scrape_urls <-
 
       # Avoid Urls that cannot be retrieved
       possibleError <- tryCatch(
-        r <- httr::GET(Urls[i], httr::timeout(10)),
+        r <- httr::GET(Urls[i], httr::timeout(20)),
         error = function(e)
           e
       )
+
 
       if (inherits(possibleError, "error")) {
         scrapedUrls[[i]] <-
@@ -226,7 +229,7 @@ scrape_urls <-
       if (status == 200) {
         # Scrape page, using rvest
         tryCatch({
-          html <- xml2::read_html(Urls[i], encoding = encoding)
+          html <- xml2::read_html(r, encoding = encoding)
 
 
           data <- list()

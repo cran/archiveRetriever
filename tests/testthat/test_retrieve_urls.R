@@ -1,5 +1,6 @@
 context("check-retrieveUrls-output")
 library(testthat)
+library(webmockr)
 library(archiveRetriever)
 
 
@@ -66,15 +67,3 @@ test_that("retrieve_urls() needs homepage to be saved in the Internet Archive",
               "Homepage has never been saved in the Internet Archive"
             )
           })
-
-#Check whether URL exists with 200 status
-test_that("retrieve_urls() needs homepage with status 200", {
-  expect_error(
-    retrieve_urls(
-      "https://www.sowi.uni-mannheim.de/schoen/team/akademische-mitarbeiterinnen-und-mitarbeiter/gavras-konstantin/",
-      "2016-01-01",
-      "2016-05-31"
-    ),
-    "Please add an existing URL"
-  )
-})

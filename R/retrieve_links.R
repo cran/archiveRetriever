@@ -75,10 +75,11 @@ retrieve_links <- function(ArchiveUrls, encoding = "UTF-8", ignoreErrors = FALSE
   #### Main function
 
   fullUrls <- list()
-  pb <-
-    txtProgressBar(min = 0,
-                   max = length(ArchiveUrls),
-                   style = 3)
+  if(length(ArchiveUrls) > 1){
+    pb <- txtProgressBar(min = 0,
+                         max = length(ArchiveUrls),
+                         style = 3)
+  }
 
   for (i in seq_len(length(ArchiveUrls))) {
     possibleError <- tryCatch(
@@ -145,7 +146,9 @@ retrieve_links <- function(ArchiveUrls, encoding = "UTF-8", ignoreErrors = FALSE
       }
     }
 
-    setTxtProgressBar(pb, i)
+    if(length(ArchiveUrls) > 1){
+      setTxtProgressBar(pb, i)
+    }
 
   }
 

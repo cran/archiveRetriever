@@ -4,13 +4,12 @@ library(webmockr)
 library(archiveRetriever)
 
 #Check whether function output is data frame
-test_that("retrieve_links() returns a data frame", {
-  vcr::use_cassette("retrieve_links", {
-  output <-
-    retrieve_links("http://web.archive.org/web/20190801001228/https://www.spiegel.de/")
+  test_that("retrieve_links() returns a data frame", {
+    skip_on_cran()
+    output <-
+      retrieve_links("http://web.archive.org/web/20190801001228/https://www.spiegel.de/")
+    expect_is(output, "data.frame")
   })
-  expect_is(output, "data.frame")
-})
 
 #Check that encoding is character
 test_that("retrieve_links() requires encoding to be character", {
@@ -82,9 +81,9 @@ test_that("retrieve_links() returns error if request timeout",
               status = 404
             )
             output <- retrieve_links(
-                "http://web.archive.org/web/20190801001228/https://www.spiegel.de/",
-                ignoreErrors = TRUE
-              )
+              "http://web.archive.org/web/20190801001228/https://www.spiegel.de/",
+              ignoreErrors = TRUE
+            )
             expect_is(output, "data.frame")
 
             webmockr::disable()

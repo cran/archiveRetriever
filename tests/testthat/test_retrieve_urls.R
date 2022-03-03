@@ -59,6 +59,7 @@ test_that("retrieve_urls() needs endDate to be not in the future", {
 #Check whether Homepage has ever been saved in the Internet Archive
 test_that("retrieve_urls() needs homepage to be saved in the Internet Archive",
           {
+            skip_on_cran()
             expect_error(
               retrieve_urls(
                 "https://cyprus-mail.com/2021/02/18/the-secret-helping-car-companies-stay-profitable/",
@@ -68,3 +69,24 @@ test_that("retrieve_urls() needs homepage to be saved in the Internet Archive",
               "Homepage has never been saved in the Internet Archive"
             )
           })
+
+#Check error message if timeout
+test_that("retrieve_links() returns error if request timeout",
+          {
+            webmockr::enable()
+
+            webmockr::to_timeout(
+              webmockr::stub_request("get", "https://www.nytimes.com/")
+            )
+
+            expect_error(
+              retrieve_urls(homepage = "https://www.nytimes.com/",
+                            startDate = "2020-10-01",
+                            endDate = "2020-12-31"
+              ),
+              "Please check whether the page exists"
+            )
+            webmockr::disable()
+          })
+
+

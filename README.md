@@ -1,7 +1,7 @@
 
 # archiveRetriever
 
-[![codecov](https://codecov.io/gh/liserman/archiveRetriever/branch/main/graph/badge.svg?token=B1VPXBAR7P)](https://codecov.io/gh/liserman/archiveRetriever)
+[![codecov](https://codecov.io/gh/liserman/archiveRetriever/branch/main/graph/badge.svg?token=B1VPXBAR7P)](https://app.codecov.io/gh/liserman/archiveRetriever)
 [![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/archiveRetriever)](https://cran.r-project.org/package=archiveRetriever)
 [![CRAN\_latest\_release\_date](https://www.r-pkg.org/badges/last-release/archiveRetriever)](https://cran.r-project.org/package=archiveRetriever)
 [![Downloads](https://cranlogs.r-pkg.org/badges/archiveRetriever)](https://cran.r-project.org/package=archiveRetriever)
@@ -12,7 +12,7 @@ The goal of the archiveRetriever package is to provide a systematic
 workflow for retrieving web data from mementos stored in the Internet
 Archive. Currently, the package includes the following functions:
 
--   `archive_overview` generates a calender providing an overview of the
+-   `archive_overview` generates a calendar providing an overview of the
     available mementos of the homepage in the Internet Archive within a
     specific time range. This function is very useful for getting a
     quick glimpse of the web data available when planning to retrieve a
@@ -183,14 +183,24 @@ using packages for string operations, such as
 ``` r
 head(nytimes_links)
 #> # A tibble: 6 x 2
-#>   baseUrl                               links                                   
-#>   <chr>                                 <chr>                                   
-#> 1 http://web.archive.org/web/202010010~ http://web.archive.org/web/202010010000~
-#> 2 http://web.archive.org/web/202010010~ http://web.archive.org/web/202010010000~
-#> 3 http://web.archive.org/web/202010010~ http://web.archive.org/web/202010010000~
-#> 4 http://web.archive.org/web/202010010~ http://web.archive.org/web/202010010000~
-#> 5 http://web.archive.org/web/202010010~ http://web.archive.org/web/202010010000~
-#> 6 http://web.archive.org/web/202010010~ http://web.archive.org/web/202010010000~
+#>   baseUrl                                                            links      
+#>   <chr>                                                              <chr>      
+#> 1 http://web.archive.org/web/20201001000041/https://www.nytimes.com/ http://web~
+#> 2 http://web.archive.org/web/20201001000041/https://www.nytimes.com/ http://web~
+#> 3 http://web.archive.org/web/20201001000041/https://www.nytimes.com/ http://web~
+#> 4 http://web.archive.org/web/20201001000041/https://www.nytimes.com/ http://web~
+#> 5 http://web.archive.org/web/20201001000041/https://www.nytimes.com/ http://web~
+#> 6 http://web.archive.org/web/20201001000041/https://www.nytimes.com/ http://web~
+```
+
+Sometimes, some of the retrieved urls are unable to access, producing an
+error message. Especially when retrieving links from a larger body of
+archive-urls, you may not want your process to break due to these
+inaccessible urls. For this purpose, you can use the `ignoreErrors`
+option.
+
+``` r
+nytimes_links <- retrieve_links(ArchiveUrls = "http://web.archive.org/web/20201001000041/https://www.nytimes.com/", ignoreErrors = TRUE)
 ```
 
 For some applications, it might not be necessary to include the
@@ -204,7 +214,7 @@ The `scrape_urls` function is the main function of the
 `ArchiveRetriever` package. The function takes a memento of the Internet
 Archive and a XPath (or CSS) vector as obligatory inputs and results in
 a tibble with the content scraped using the XPath/CSS selectors. There
-is one important point to consider when entering the `Paths` for
+is one important point to consider when entering the *Paths* for
 scraping: The option only takes named vectors, in order to provide
 meaningful column names for the resulting tibbles.
 
@@ -235,6 +245,63 @@ the content aimed to be scraped. After break-off, the function still
 outputs a tibble, ensuring that the process does not need to be started
 anew. After break-off, users need to identify the element position of
 break-off, fix the error in the Paths and are able to re-start the
-`scrape_urls` function exactly where it broke off. Lastly, we also added
-a length warning for long url vector inserted to the `scrape_urls`
-raising awareness that a large chunk of data is now going to be scraped.
+`scrape_urls` function exactly where it broke off. The scraping process
+until break-off can be attached to the new process via the `attachto`
+option. Lastly, we also added a length warning for long url vector
+inserted to the `scrape_urls` raising awareness that a large chunk of
+data is now going to be scraped.
+
+All these different break-offs can be deactivated using the optional
+arguments `ignoreErrors = TRUE` and `stopatempty = FALSE`. However, we
+advise to use these options with care. The cutoff point for the number
+of urls without content in a row until break-off can be set using
+`emptylim`. In order to facilitate the automation of the scraping
+process, we also added the optional argument `lengthwarning = FALSE` to
+deactivate the length warning.
+
+In many scraping projects it is very convenient to collapse similar
+html-nodes into a single observation. We have also done this in the
+example outlined so far. This enabled us to retrieve the clean article
+text, filtering out all figures, advertisements, teasers and other
+annoying things newspapers put in between paragraphs. However, for some
+applications, we may want to treat similar html-nodes as independent
+observations. One example for this is the retrieving of article
+headlines and teasers from overview pages. For this purpose,
+`scrape_urls` offers the option `collapse = FALSE`. Instead of
+collapsing the content of similar html-nodes into one observation,
+different nodes are treated as independent observations. Yet, in order
+for this to work as intended, it is necessary that for all different
+Paths you extract in the same process, the number of retrieved nodes
+matches.
+
+``` r
+nytimes_teaser <- scrape_urls(Urls = "https://web.archive.org/web/20201001000859/https://www.nytimes.com/section/politics",
+                    Paths = c(title = "//article/div/h2//text()",
+                              teaser = "//article/div/p/text()"),
+                    collapse = FALSE,
+                    archiveDate = TRUE)
+```
+
+``` r
+nytimes_teaser
+#> # A tibble: 4 x 4
+#>   Urls                   title                 teaser                archiveDate
+#>   <chr>                  <chr>                 <chr>                 <date>     
+#> 1 https://web.archive.o~ Tuesday’s Debate Mad~ President Trump’s un~ 2020-10-01 
+#> 2 https://web.archive.o~ Takeaways on Trump, ~ A New York Times Mag~ 2020-10-01 
+#> 3 https://web.archive.o~ Biden Tours Ohio and~ A day after a turbul~ 2020-10-01 
+#> 4 https://web.archive.o~ Six Takeaways From t~ It was 90 minutes of~ 2020-10-01
+```
+
+Lastly, `scrape_urls` comes with a handy option `archiveDate`, to add a
+column indicating the date of the retrieved Internet Archive memento.
+
+All these different break-offs can be deactivated using the optional
+arguments `ignoreErrors = TRUE` and `stopatempty = FALSE`. However, we
+advise to use these options with care. The cutoff point for the number
+of urls without content in a row until break-off can be set using
+`emptylim`. In order to facilitate the automation of the scraping
+process, we also added the optional argument `lengthwarning = FALSE` to
+deactivate the length warning.
+
+archivedate collapse

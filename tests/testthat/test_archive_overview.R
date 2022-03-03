@@ -9,7 +9,7 @@ library(archiveRetriever)
 test_that("archive_overview() returns a plot with the correct time frame", {
   skip_on_cran()
   output_overview <-
-    archive_overview(homepage = "https://www.nytimes.com/",
+    archive_overview(homepage = "http://www.nytimes.com/",
                      startDate = "2018-06-01",
                      endDate = "Dec/01/2018")
   expect_equal(output_overview$data$date[1], as.Date("2018-06-01"))
@@ -73,7 +73,7 @@ test_that("archive_overview() needs endDate to be not in the future", {
 #Check whether Homepage has ever been saved in the Internet Archive
 test_that("archive_overview() needs homepage to be saved in the Internet Archive",
           {
-            skip_on_cran()
+
             expect_error(
               archive_overview(
                 "https://cyprus-mail.com/2021/02/18/the-secret-helping-car-companies-stay-profitable/",
@@ -82,4 +82,24 @@ test_that("archive_overview() needs homepage to be saved in the Internet Archive
               ),
               "Homepage has never been saved in the Internet Archive"
             )
+          })
+
+
+#Check error message if timeout
+test_that("retrieve_links() returns error if request timeout",
+          {
+            webmockr::enable()
+
+            webmockr::to_timeout(
+              webmockr::stub_request("get", "https://www.nytimes.com/",
+              )
+            )
+            expect_error(
+              archive_overview(homepage ="https://www.nytimes.com/",
+                               startDate = "2020-10-01",
+                               endDate = "2020-12-31"
+              ),
+              "Please check whether the page exists"
+            )
+            webmockr::disable()
           })

@@ -18,9 +18,8 @@
 #' @return This function scrapes the content of mementos or lower-level web pages from the Internet Archive. It returns a tibble including Urls and the scraped content. However, a memento being stored in the Internet Archive does not guarantee that the information from the homepage can be actually scraped. As the Internet Archive is an internet resource, it is always possible that a request fails due to connectivity problems. One easy and obvious solution is to re-try the function.
 #' @examples
 #' \dontrun{
-#' scrape_urls(Urls = "http://web.archive.org/web/20201001004918/https://www.nytimes.com/2020/09/30/opinion/biden-trump-2020-debate.html",
-#' Paths = c(title = "//h1[@itemprop='headline']", author = "//span[@itemprop='name']"))
-#' scrape_urls(Urls = "https://web.archive.org/web/20201001000859/https://www.nytimes.com/section/politics",
+#' scrape_urls(
+#' Urls = "https://web.archive.org/web/20201001000859/https://www.nytimes.com/section/politics",
 #' Paths = c(title = "//article/div/h2//text()", teaser = "//article/div/p/text()"),
 #' collapse = FALSE, archiveDate = TRUE)
 #'
@@ -64,6 +63,30 @@ scrape_urls <-
 
     # Globally bind variables
     counter <- NULL
+
+
+    # If Urls is dataframe, check if output from retrieve_links. If yes, reduce to Urls of interest and generate vector
+    if(is.data.frame(Urls)){
+      if(ncol(Urls)==1){
+        Urls <- Urls[,1]
+      } else
+        if(ncol(Urls)>2){
+          stop("Urls must be vector of Urls or output from retrieve_links(). Dataframes not obtained from retrieve_links() are not allowed.")
+        } else
+          if(ncol(Urls)==2){
+            if (identical(names(Urls), c("baseUrl", "links"))){
+              Urls <- Urls$links
+            } else {
+              stop("Urls must be vector of Urls or output from retrieve_links(). Dataframes not obtained from retrieve_links() are not allowed.")
+            }
+          }
+    }
+
+    # Check if Urls is atomic
+    if(!is.atomic(Urls)){
+      stop("Urls must be vector of Urls or output from retrieve_links(). Other object types are not allowed.")
+    }
+
 
     # Urls must start with http
     if (!any(stringr::str_detect(Urls, "web\\.archive\\.org")))
@@ -242,7 +265,7 @@ for (i in (seq_len(length(Urls)-(startnum-1))+(startnum-1))) {
   # Retrieve if status = 200
   if (status == 200) {
 
-    tryCatch({
+    possibleError <- tryCatch({
     html <- xml2::read_html(r, encoding = encoding)
 
     # Retrieve elements and store in data list
@@ -269,9 +292,16 @@ for (i in (seq_len(length(Urls)-(startnum-1))+(startnum-1))) {
 
   # End trycatch
   },
-  error = function(e) {
-    cat("ERROR :", conditionMessage(e), "\n")
-  })
+  error = function(e) e)
+
+    if(inherits(possibleError, "error")){
+      if(ignoreErrors == TRUE){
+        next
+      } else {
+        cat("ERROR in Urls[",i,"]:", conditionMessage(possibleError), "\n")
+      }
+
+    }
 
   # End status == 200 if clause
   } else {

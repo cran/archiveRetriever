@@ -1,3 +1,12 @@
+# archiveRetriever 0.1.2
+
+* Fixes to *ignoreErrors* option for html reading-errors in *scrape_urls()*
+* Fixes to *retrieve_links()* for Errors occurring in last Url
+* Improve compatibility between *retrieve_links()* and *scrape_urls()*
+
+---
+
+
 # archiveRetriever 0.1.1
 
 * Fixes to *ignoreErrors* option for encoding errors in *retrieve_links()*

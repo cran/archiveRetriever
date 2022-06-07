@@ -1,6 +1,6 @@
 Package: archiveRetriever
 Title: Retrieve Archived Web Pages from the 'Internet Archive'
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: 
     c(person(given = "Konstantin",
              family = "Gavras",
@@ -10,7 +10,7 @@ Authors@R:
       person(given = "Lukas",
              family = "Isermann",
              role = c("aut", "cre"),
-             email = "lukas.isermann@mzes.uni-mannheim.de",
+             email = "lukas.isermann@uni-mannheim.de",
              comment = c(ORCID = "https://orcid.org/0000-0002-7195-9302")))
 Description: Scraping content from archived web pages stored in
     the 'Internet Archive' (<https://archive.org>) using a systematic
@@ -24,11 +24,11 @@ Imports: anytime, dplyr, ggplot2, gridExtra, httr, jsonlite, lubridate,
         rvest, stringr, tibble, tidyr, utils, xml2
 Suggests: vcr (>= 0.6.0), testthat, webmockr
 Encoding: UTF-8
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0
 NeedsCompilation: no
-Packaged: 2022-03-03 18:30:10 UTC; liserman
+Packaged: 2022-06-07 15:11:03 UTC; liserman
 Author: Konstantin Gavras [aut] (<https://orcid.org/0000-0002-9222-0101>),
   Lukas Isermann [aut, cre] (<https://orcid.org/0000-0002-7195-9302>)
-Maintainer: Lukas Isermann <lukas.isermann@mzes.uni-mannheim.de>
+Maintainer: Lukas Isermann <lukas.isermann@uni-mannheim.de>
 Repository: CRAN
-Date/Publication: 2022-03-03 19:00:02 UTC
+Date/Publication: 2022-06-07 20:20:06 UTC

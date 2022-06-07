@@ -56,5 +56,6 @@ scrape_urls(
 Urls = "https://web.archive.org/web/20201001000859/https://www.nytimes.com/section/politics",
 Paths = c(title = "//article/div/h2//text()", teaser = "//article/div/p/text()"),
 collapse = FALSE, archiveDate = TRUE)
+
 }
 }

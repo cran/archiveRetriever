@@ -1,6 +1,6 @@
 Package: archiveRetriever
 Title: Retrieve Archived Web Pages from the 'Internet Archive'
-Version: 0.1.2
+Version: 0.2.0
 Authors@R: 
     c(person(given = "Konstantin",
              family = "Gavras",
@@ -26,9 +26,9 @@ Suggests: vcr (>= 0.6.0), testthat, webmockr
 Encoding: UTF-8
 RoxygenNote: 7.2.0
 NeedsCompilation: no
-Packaged: 2022-06-07 15:11:03 UTC; liserman
+Packaged: 2022-06-21 14:55:54 UTC; liserman
 Author: Konstantin Gavras [aut] (<https://orcid.org/0000-0002-9222-0101>),
   Lukas Isermann [aut, cre] (<https://orcid.org/0000-0002-7195-9302>)
 Maintainer: Lukas Isermann <lukas.isermann@uni-mannheim.de>
 Repository: CRAN
-Date/Publication: 2022-06-07 20:20:06 UTC
+Date/Publication: 2022-06-21 15:20:05 UTC

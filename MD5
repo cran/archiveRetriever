@@ -1,10 +1,10 @@
-ba75b676146335ab074b7d3a6f103395 *DESCRIPTION
+ad7fad473dfe53107eb34dac98f149b4 *DESCRIPTION
 c6c2319f582d1fd2ead6b15e3ea9043f *NAMESPACE
-f47bc7905f3d757a9b6ca6ca4b488a77 *NEWS.md
+a441ad098eac07b73c7987bcb01412df *NEWS.md
 14451cd56c29362893445d6aafdeac20 *R/archive_overview.R
-9680615c301ea19a7137c598527db7cf *R/retrieve_links.R
+36b140025947e758758db737f16a1a15 *R/retrieve_links.R
 c680778b7fd51e7e4b2f87613bb61c4a *R/retrieve_urls.R
-1f3f991596cecb42d6845e3636b6d2a2 *R/scrape_urls.R
+d2b091e148ac4527301e2a21796ecf3c *R/scrape_urls.R
 8f85bb3cf5e60243744e774c6c2c058b *README.md
 ed7e6242a96cf0b93ebe72cf4f88450b *man/archive_overview.Rd
 9c43a13aa304be4bdbb6b49b5b7a14f3 *man/figures/archiveRetriever_logo.png
@@ -27,7 +27,7 @@ b495bd6f52052ff0168b16abb1db086f *tests/fixtures/scrape_url6.yml
 5715f5466d5692398874cefc91844794 *tests/fixtures/scrape_url7.yml
 98fe0cc3ceaf85b665ec89ed3f438656 *tests/testthat.R
 ff6b1ff192bbf43a22af7dbd2e0c494c *tests/testthat/setup-archiveRetriever.R
-b957a139eaabaedc5908d57295aefd62 *tests/testthat/test_archive_overview.R
+21fe28dc5e8c35615b0d85e28f702d45 *tests/testthat/test_archive_overview.R
 654d46a32c55cb18a6de67b0551b10db *tests/testthat/test_retrieve_links.R
 b7e452a5705f2bfac22e818278d96b2a *tests/testthat/test_retrieve_urls.R
 ecf5b96837b59ad66775a7a475e446c2 *tests/testthat/test_scrape_urls.R

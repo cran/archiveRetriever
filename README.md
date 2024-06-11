@@ -6,6 +6,7 @@
 [![CRAN_latest_release_date](https://www.r-pkg.org/badges/last-release/archiveRetriever)](https://cran.r-project.org/package=archiveRetriever)
 [![Downloads](https://cranlogs.r-pkg.org/badges/archiveRetriever)](https://cran.r-project.org/package=archiveRetriever)
 [![Downloads](https://cranlogs.r-pkg.org/badges/grand-total/archiveRetriever?color=yellow)](https://cran.r-project.org/package=archiveRetriever)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11548776.svg)](https://doi.org/10.5281/zenodo.11548776)
 
 R-Package to retrieve web data from the Internet Archive
 
@@ -13,26 +14,57 @@ The goal of the archiveRetriever package is to provide a systematic
 workflow for retrieving web data from mementos stored in the Internet
 Archive. Currently, the package includes the following functions:
 
--   `archive_overview` generates a calendar providing an overview of the
-    available mementos of the homepage in the Internet Archive within a
-    specific time range. This function is very useful for getting a
-    quick glimpse of the web data available when planning to retrieve a
-    comprehensive coverage of the homepage from the Internet Archive
--   `retrieve_urls` generates a vector of links to mementos of the
-    homepage stored in the Internet Archive within a specific time
-    range.
--   `retrieve_links` generates a tibble with two columns including the
-    link to the memento of the homepage stored in the Internet Archive
-    as well as all links within the memento. The two column translate to
-    the parent link with its child references. This function is useful
-    to fully cover the content within a homepage for retrieval.
--   `scrape_urls` generates a tibble including the link of the memento
-    being scraped as well as the scraped content structured in different
-    columns. The number of columns for the scraped content amounts to
-    the length of the XPath or CSS selectors used to scrape the content.
+- `archive_overview` generates a calendar providing an overview of the
+  available mementos of the homepage in the Internet Archive within a
+  specific time range. This function is very useful for getting a quick
+  glimpse of the web data available when planning to retrieve a
+  comprehensive coverage of the homepage from the Internet Archive
+- `retrieve_urls` generates a vector of links to mementos of the
+  homepage stored in the Internet Archive within a specific time range.
+- `retrieve_links` generates a tibble with two columns including the
+  link to the memento of the homepage stored in the Internet Archive as
+  well as all links within the memento. The two column translate to the
+  parent link with its child references. This function is useful to
+  fully cover the content within a homepage for retrieval.
+- `scrape_urls` generates a tibble including the link of the memento
+  being scraped as well as the scraped content structured in different
+  columns. The number of columns for the scraped content amounts to the
+  length of the XPath or CSS selectors used to scrape the content.
 
 We present a short step-by-step guide as well as the functions in more
 detail below.
+
+## How to cite this package
+
+To cite the archiveRetriever package, you can use:
+
+> Isermann, Lukas; Gavras, Konstantin. (2024). archiveRetriever:
+> Retrieve Archived Web Pages from the ‘Internet Archive’. R package
+> version 0.4.0. <https://CRAN.R-project.org/package=archiveRetriever>.
+
+You can also access the preferred citation as well as the bibtex entry
+for the archiveRetriever Package via R:
+
+``` r
+citation("archiveRetriever")
+#> Warning in citation("archiveRetriever"): konnte das Jahr für 'archiveRetriever'
+#> aus der DESCRIPTION des Paketes nicht bestimmen
+#> Um Paket 'archiveRetriever' in Publikationen zu zitieren, nutzen Sie
+#> bitte:
+#> 
+#>   Isermann L, Gavras K (????). _archiveRetriever: Retrieve Archived Web
+#>   Pages from the 'Internet Archive'_. R package version 0.4.0,
+#>   <https://github.com/liserman/archiveRetriever/>.
+#> 
+#> Ein BibTeX-Eintrag für LaTeX-Benutzer ist
+#> 
+#>   @Manual{,
+#>     title = {archiveRetriever: Retrieve Archived Web Pages from the 'Internet Archive'},
+#>     author = {Lukas Isermann and Konstantin Gavras},
+#>     note = {R package version 0.4.0},
+#>     url = {https://github.com/liserman/archiveRetriever/},
+#>   }
+```
 
 ## Installation
 
@@ -97,7 +129,7 @@ of the homepage’s availability in the Internet Archive.
 nytimes_overview
 ```
 
-<img src="man/figures/unnamed-chunk-6-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-7-1.png" width="100%" />
 
 For the New York Times, we find that the Internet Archive save a memento
 of their homepage every day, which is highly reasonable as this homepage
@@ -119,7 +151,7 @@ nytimesArticle_overview <- archive_overview(homepage = "https://www.nytimes.com/
 nytimesArticle_overview
 ```
 
-<img src="man/figures/unnamed-chunk-8-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-9-1.png" width="100%" />
 
 As the article has been published on November 07, there are of course no
 mementos available before that date.
@@ -177,9 +209,10 @@ parties.
 
 Sticking to the example of the New York Times, we extract all links of
 the memento stored on October 01, 2020 using the `retrieve_links`
-function. Please be aware that the `retrieve_links` function only takes
-mementos of the Internet Archive as input to ensure only these pages are
-being scraped using our scraping functions.
+function. Please be aware that by default the `retrieve_links` function
+only takes mementos of the Internet Archive as input. If you want to use
+`retrieve_links` on web pages not on the Internet Archive, you can
+disable this limitation by setting the option *nonArchive = TRUE*.
 
 ``` r
 nytimes_links <- retrieve_links(ArchiveUrls = "http://web.archive.org/web/20201001000041/https://www.nytimes.com/")
@@ -229,10 +262,12 @@ using the `retrieve_urls` function.
 The `scrape_urls` function is the main function of the
 `ArchiveRetriever` package. The function takes a memento of the Internet
 Archive and a XPath (or CSS) vector as obligatory inputs and results in
-a tibble with the content scraped using the XPath/CSS selectors. There
-is one important point to consider when entering the *Paths* for
-scraping: The option only takes named vectors, in order to provide
-meaningful column names for the resulting tibbles.
+a tibble with the content scraped using the XPath/CSS selectors.
+Similarly to `retrieve_links`, the limitation to Internet Archive
+mementos in `scrape_urls` can be disabled using the option *nonArchive =
+TRUE*. There is one important point to consider when entering the
+*Paths* for scraping: The option only takes named vectors, in order to
+provide meaningful column names for the resulting tibbles.
 
 ``` r
 nytimes_article <- scrape_urls(Urls = "http://web.archive.org/web/20201001004918/https://www.nytimes.com/2020/09/30/opinion/biden-trump-2020-debate.html",
@@ -254,7 +289,7 @@ When using the `scrape_urls` function to scrape large amounts of urls,
 we added some important (optional) features, ensuring that the scraping
 process works smoothly. Most importantly, the process breaks when no
 content could be scraped for a certain number of urls (default is 10) -
-most often meaning that the XPath have not been selected correctly.
+most often meaning that the XPaths have not been selected correctly.
 Additionally, the process breaks when only some elements of the Paths
 could be scraped - implying that the XPaths have changed for parts of
 the content aimed to be scraped. After break-off, the function still
@@ -294,20 +329,44 @@ matches.
 nytimes_teaser <- scrape_urls(Urls = "https://web.archive.org/web/20201001000859/https://www.nytimes.com/section/politics",
                     Paths = c(title = "//article/div/h2//text()",
                               teaser = "//article/div/p/text()"),
-                    collapse = FALSE,
+                    collapse = FALSE)
+```
+
+``` r
+nytimes_teaser
+#> # A tibble: 4 × 3
+#>   Urls                                                              title teaser
+#>   <chr>                                                             <chr> <chr> 
+#> 1 https://web.archive.org/web/20201001000859/https://www.nytimes.c… Tues… Presi…
+#> 2 https://web.archive.org/web/20201001000859/https://www.nytimes.c… Take… A New…
+#> 3 https://web.archive.org/web/20201001000859/https://www.nytimes.c… Bide… A day…
+#> 4 https://web.archive.org/web/20201001000859/https://www.nytimes.c… Six … It wa…
+```
+
+If we want to have even more control over what content gets collapsed
+into one observation and when `scrape_urls` starts a new observation, we
+can also set `collapse` to a structuring Xpath. This Xpath should be a
+parent node of the nodes we want to collapse. To demonstrate this, we
+take the example above, but this time use the `article` node as
+structuring Xpath.
+
+``` r
+nytimes_teaser <- scrape_urls(Urls = "https://web.archive.org/web/20201001000859/https://www.nytimes.com/section/politics",
+                    Paths = c(title = "//h2//text()",
+                              teaser = "//p/text()"),
+                    collapse = "//article",
                     archiveDate = TRUE)
 ```
 
 ``` r
 nytimes_teaser
 #> # A tibble: 4 × 4
-#>   Urls                                                   title teaser archiveD…¹
-#>   <chr>                                                  <chr> <chr>  <date>    
-#> 1 https://web.archive.org/web/20201001000859/https://ww… Tues… Presi… 2020-10-01
-#> 2 https://web.archive.org/web/20201001000859/https://ww… Take… A New… 2020-10-01
-#> 3 https://web.archive.org/web/20201001000859/https://ww… Bide… A day… 2020-10-01
-#> 4 https://web.archive.org/web/20201001000859/https://ww… Six … It wa… 2020-10-01
-#> # … with abbreviated variable name ¹​archiveDate
+#>   Urls                                                  title teaser archiveDate
+#>   <chr>                                                 <chr> <chr>  <date>     
+#> 1 https://web.archive.org/web/20201001000859/https://w… Tues… Presi… 2020-10-01 
+#> 2 https://web.archive.org/web/20201001000859/https://w… Take… A New… 2020-10-01 
+#> 3 https://web.archive.org/web/20201001000859/https://w… Bide… A day… 2020-10-01 
+#> 4 https://web.archive.org/web/20201001000859/https://w… Six … It wa… 2020-10-01
 ```
 
 Lastly, `scrape_urls` comes with a handy option `archiveDate`, to add a
